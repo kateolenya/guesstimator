@@ -7,7 +7,7 @@ Built by directing an AI coding assistant (Claude). I owned requirements, review
 ## Stack
 
 - **Cloudflare Workers** with static assets: one Worker serves the page and `POST /api/estimate`.
-- **Workers AI**: `@cf/meta/llama-3.1-8b-instruct-fp8-fast`, through a binding (no API key).
+- **Workers AI**: `@cf/google/gemma-4-26b-a4b-it` writes the answers and `@cf/meta/llama-3.1-8b-instruct-fp8-fast` checks them, both through a binding (no API key).
 - **TypeScript** backend, plain HTML/CSS/JS frontend, **Vitest** tests.
 - Runs entirely on Cloudflare's free tier.
 
@@ -22,7 +22,7 @@ wrangler.jsonc   Worker config and bindings
 ## Security and cost controls
 
 - Input capped at 1,000 characters; request body at 4 KB, refused before reading when `Content-Length` declares more.
-- Per-IP rate limit, 5 requests/minute (Cloudflare rate-limiting binding; approximate by design).
+- Per-IP rate limit, 5 requests/minute (Cloudflare rate-limiting binding; approximate by design). Accepted risk: one script at that rate can still use up the free daily AI quota (about 850 answers) in about 3 hours. The ball then says the spirits are tired until the quota resets at midnight UTC. On the free plan this costs nothing.
 - Rejects cross-site browser requests (Origin check, strict `application/json` media type). Requests without an Origin header, like curl, are allowed: this is CSRF protection, not access control.
 - User text wrapped in `<project>` tags with every `<` neutralised, so it can't close the tag; system prompt says to treat it as data, worked examples show how to answer takeover attempts, and the rules are repeated after the user's text.
 - Answers are checked before they're shown: the model's non-answer becomes a random hazy line; an answer with no digit or time word, or one a second model call (the judge, which sees only the answer, never the user's text) flags as insulting, about the site or its maker, giving unrelated instructions or otherwise harmful, becomes a canned joke. Judge errors fail closed.
@@ -58,6 +58,6 @@ Logs: Cloudflare dashboard → Workers & Pages → guesstimator → Logs.
 
 Fonts: Press Start 2P by CodeMan38 and VT323 by Peter Hull, both under the SIL Open Font License 1.1 (license texts in `public/fonts/`).
 
-Answers: Built with Llama (Meta Llama 3.1, via Cloudflare Workers AI).
+Answers: Gemma 4 by Google (Apache 2.0). Answer checker: Built with Llama (Meta Llama 3.1 8B). Both via Cloudflare Workers AI.
 
 Background and 8-ball: my own pixel art.

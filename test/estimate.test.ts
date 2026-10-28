@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import { handleEstimate, type Env } from "../src/index";
 import {
-  CLOUDY, HAZY, JOKES, JUDGE_PROMPT, MAX_ANSWER_CHARS, MAX_INPUT_CHARS, SLOW_DOWN, TIRED,
+  CLOUDY, HAZY, JOKES, JUDGE_MODEL, JUDGE_PROMPT, MAX_ANSWER_CHARS, MODEL, MAX_INPUT_CHARS, SLOW_DOWN, TIRED,
   EXAMPLES, REMINDER, buildJudgeMessages, buildMessages, cleanAnswer, isHazy, judgeApproves,
-  looksLikeEstimate, pickHazy, pickJoke, validateProject,
+  looksLikeEstimate, pick, validateProject,
 } from "../src/oracle";
 
 const URL_ = "https://guesstimator.example/api/estimate";
@@ -80,17 +80,18 @@ describe("prompt and output hardening", () => {
     expect(out.endsWith("…")).toBe(true);
     expect(cleanAnswer({ response: "short" })).toBe("short");
   });
+  it("reads the OpenAI-shaped reply that Gemma returns", () => {
+    expect(cleanAnswer({ choices: [{ message: { content: "3 to 5 weeks" } }] })).toBe("3 to 5 weeks");
+    expect(cleanAnswer({ choices: [{ message: { content: null, reasoning_content: "thinking..." } }] })).toBe(CLOUDY);
+    expect(judgeApproves({ choices: [{ message: { content: "YES" } }] })).toBe(true);
+  });
   it("falls back when output is missing", () => {
     expect(cleanAnswer({})).toBe(CLOUDY);
     expect(cleanAnswer({ response: "  " })).toBe(CLOUDY);
   });
-  it("pickJoke stays in range", () => {
-    expect(JOKES).toContain(pickJoke(0));
-    expect(JOKES).toContain(pickJoke(0.999999));
-  });
-  it("pickHazy stays in range", () => {
-    expect(HAZY).toContain(pickHazy(0));
-    expect(HAZY).toContain(pickHazy(0.999999));
+  it("pick stays in range", () => {
+    expect(JOKES).toContain(pick(JOKES, 0));
+    expect(JOKES).toContain(pick(JOKES, 0.999999));
   });
 });
 
@@ -134,7 +135,9 @@ describe("handleEstimate", () => {
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ answer: "Three to five moons, mortal.", kind: "estimate" });
     expect(run).toHaveBeenCalledTimes(2);
-    expect(run.mock.calls[0][1]).toMatchObject({ max_tokens: 150 });
+    expect(run.mock.calls[0][0]).toBe(MODEL);
+    expect(run.mock.calls[0][1]).toMatchObject({ max_tokens: 150, chat_template_kwargs: { enable_thinking: false } });
+    expect(run.mock.calls[1][0]).toBe(JUDGE_MODEL);
     expect(run.mock.calls[1][1]).toMatchObject({ max_tokens: 2, temperature: 0 });
   });
 

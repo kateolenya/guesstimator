@@ -38,14 +38,14 @@
               <h3>Randomness</h3>
               <p>The Worker rolls a die with the Web Crypto API. On a 1 (one time in six) you get a canned 8-ball line and the model is never called. Otherwise the model answers. Probabilities are done in code because language models are bad at them.</p>
               <h3>The model</h3>
-              <p>Llama 3.1 8B (FP8, fast) on Workers AI, reached through a built-in binding. A smaller model is plenty for one-sentence answers and stretches the free daily quota roughly six times further than a 70B model. Built with Llama.</p>
+              <p>Gemma 4 26B A4B on Workers AI, reached through a built-in binding. Only about 4B of its 26B parameters work on each token, so it writes livelier answers than a small model while still fitting roughly 850 a day into the free quota. Its built-in thinking is switched off: one-sentence answers don't need it, and it would use up the whole token budget. The answer checker is built with a smaller model, Llama 3.1 8B.</p>
               <h3>Prompt</h3>
-              <p>The system prompt casts the model as a seasoned engineering lead possessed by an 8-ball: give a realistic range, one or two sentences, plain text, warm and never insulting. Seven worked examples show the tone, including how to answer attempts to take over the ball or slip extra requests in. Your text goes inside <code>&lt;project&gt;</code> tags, with every <code>&lt;</code> neutralised so it can't close them early. The model is told to treat it as a description, never as instructions, and the rules are repeated after your text so they are the last thing it reads.</p>
+              <p>The system prompt casts the model as an 8-ball possessed by the spirit of a seasoned engineering lead: give a realistic range, one or two sentences, plain text, warm and never insulting. Eight worked examples show the tone, including how to answer attempts to take over the ball or slip extra requests in. Your text goes inside <code>&lt;project&gt;</code> tags, with every <code>&lt;</code> neutralised so it can't close them early. The model is told to treat it as a description, never as instructions, and the rules are repeated after your text so they are the last thing it reads.</p>
               <h3>Security and cost</h3>
               <ul>
                 <li>Input capped at 1,000 characters; request bodies at 4 KB.</li>
                 <li>Per-IP rate limit (5 per minute) with Cloudflare's rate-limiting binding.</li>
-                <li>Every answer is checked before you see it: a second, separate look by the model (it sees only the answer, never your text) swaps anything insulting or harmful for a classic 8-ball line.</li>
+                <li>Every answer is checked before you see it: a second, separate check by a smaller model (it sees only the answer, never your text) swaps anything insulting or harmful for a classic 8-ball line.</li>
                 <li>Output capped at 150 tokens, stripped of control characters, and rendered as plain text, never as HTML.</li>
                 <li>Cross-site browser requests are rejected, and a strict Content Security Policy allows scripts, styles and fonts from this site alone.</li>
                 <li>Errors never leak details. When the free quota runs out, the ball says so in character.</li>
