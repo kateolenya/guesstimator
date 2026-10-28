@@ -1,6 +1,6 @@
 <h1 align="center"><img src="docs/title.png" alt="GUESSTIMATOR" width="594"></h1>
 
-An 8-ball that tells you how long your project will take. One time in six it gives a classic 8-ball non-answer; otherwise an LLM gives a realistic estimate in a mystical tone.
+Describe your project to a retro pixel 8-ball and get a time estimate from the spirits. One time in six you get a prepared joke, otherwise an answer from an LLM.
 
 Built by directing an AI coding assistant (Claude). I owned requirements, review, security decisions and deployment.
 
@@ -26,10 +26,14 @@ wrangler.jsonc   Worker config and bindings
 ## Security and cost controls
 
 - Input capped at 1,000 characters; request body at 4 KB, refused before reading when `Content-Length` declares more.
-- Per-IP rate limit, 5 requests/minute (Cloudflare rate-limiting binding; approximate by design). Accepted risk: one script at that rate can still use up the free daily AI quota (about 850 answers) in about 3 hours. The ball then says the spirits are tired until the quota resets at midnight UTC. On the free plan this costs nothing.
+- Per-IP rate limit, 5 requests/minute (Cloudflare rate-limiting binding; approximate by design). Accepted risk: one script at that rate can still use up the free daily AI quota (about 850 answers) in about 3 hours. The ball then says the spirits are tired until the quota resets at midnight UTC. No cost on the free plan.
 - Rejects cross-site browser requests (Origin check, strict `application/json` media type). Requests without an Origin header, like curl, are allowed: this is CSRF protection, not access control.
 - User text wrapped in `<project>` tags with every `<` neutralised, so it can't close the tag; system prompt says to treat it as data, worked examples show how to answer takeover attempts, and the rules are repeated after the user's text.
-- Answers are checked before they're shown: the model's non-answer becomes a random hazy line; an answer with no digit or time word, or one a second model call (the judge, which sees only the answer, never the user's text) flags as insulting, about the site or its maker, giving unrelated instructions or otherwise harmful, becomes a canned joke. Judge errors fail closed.
+- Answers are checked before they're shown:
+  1. If the model declines (the text isn't a project), a random hazy line is shown instead.
+  2. If the answer has no number or time word, it isn't an estimate: a prepared joke is shown instead.
+  3. A second model, the judge, reads the answer. It never sees the user's text. If it flags the answer as insulting, about the site or its maker, giving unrelated instructions, or otherwise harmful, a prepared joke is shown instead.
+  4. If the judge fails, the answer is blocked too.
 - Output capped at 150 tokens; control, zero-width and bidi-override characters stripped; rendered with `textContent` only.
 - Strict CSP: scripts, styles and fonts from this origin only (fonts are self-hosted).
 - Internal errors, including unexpected ones, are logged and never returned. When the free daily AI quota runs out, the ball says so in character.
@@ -54,7 +58,15 @@ npm run typecheck
    ```
 4. Wrangler prints your URL: `https://guesstimator.<your-subdomain>.workers.dev`.
 
-To try it against the real model before deploying: `npm run dev` (uses Workers AI remotely, counts toward the free quota).
+### Test before changes go live
+
+- On your computer: `npm run dev` (uses Workers AI remotely, counts toward the free quota).
+- On Cloudflare, without touching the live site:
+  ```bash
+  npx wrangler versions upload                      # prints a preview link for this version
+  npx wrangler versions deploy <version-id>@100%    # when it looks good, make that exact version live
+  ```
+  Preview links are public but unlisted, and they use the same daily AI quota.
 
 Logs: Cloudflare dashboard → Workers & Pages → guesstimator → Logs.
 
@@ -70,8 +82,8 @@ Background and 8-ball: my own pixel art.
 
 - What you type is sent to Cloudflare Workers AI to get an answer. Don't enter anything confidential.
 - Your IP address is used for the rate limit.
-- No cookies, no analytics, no tracking.
 - The site logs errors and answers the checker blocks, for debugging. Cloudflare, which hosts the site, also keeps short-lived request logs under its own privacy policy.
+- No cookies, no analytics, no tracking.
 
 ## License
 

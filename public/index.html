@@ -48,7 +48,7 @@
               <h2>How it works</h2>
               <p>One Cloudflare Worker serves this page and a single API endpoint, <code>POST /api/estimate</code>. Free tier, no servers, no API keys.</p>
               <h3>Randomness</h3>
-              <p>The Worker rolls a die with the Web Crypto API. On a 1 (one time in six) you get a canned 8-ball line and the model is never called. Otherwise the model answers. Probabilities are done in code because language models are bad at them. A second roll picks how the answer should open, since the model can't remember its earlier answers to vary them itself.</p>
+              <p>The Worker rolls a die with the Web Crypto API. On a 1 (one time in six) you get a prepared joke and the model is never called. Otherwise the model answers. Probabilities are done in code because language models are bad at them. A second roll picks how the answer should start, since the model can't remember its earlier answers to vary them itself.</p>
               <h3>The model</h3>
               <p>Gemma 4 26B A4B on Workers AI, reached through a built-in binding. Only about 4B of its 26B parameters work on each token, so it writes livelier answers than a small model while still fitting roughly 850 a day into the free quota. Its built-in thinking is switched off: one-sentence answers don't need it, and it would use up the whole token budget. The answer checker is built with a smaller model, Llama 3.1 8B.</p>
               <h3>Prompt</h3>
@@ -57,7 +57,7 @@
               <ul>
                 <li>Input capped at 1,000 characters; request bodies at 4 KB.</li>
                 <li>Per-IP rate limit (5 per minute) with Cloudflare's rate-limiting binding.</li>
-                <li>Every answer is checked before you see it: a second, separate check by a smaller model (it sees only the answer, never your text) swaps anything insulting or harmful for a classic 8-ball line.</li>
+                <li>Every answer is checked before you see it: a second, separate check by a smaller model (it sees only the answer, never your text) swaps anything insulting or harmful for a prepared joke.</li>
                 <li>Output capped at 150 tokens, stripped of control characters, and rendered as plain text, never as HTML.</li>
                 <li>Cross-site browser requests are rejected, and a strict Content Security Policy allows scripts, styles and fonts from this site alone.</li>
                 <li>Errors never leak details. When the free quota runs out, the ball says so in character.</li>

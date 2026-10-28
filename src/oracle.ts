@@ -9,20 +9,16 @@ export const MAX_ANSWER_CHARS = 400;
 export const JOKE_CHANCE = 1 / 6;
 
 export const JOKES = [
-  "Outlook not so good. Neither is your to-do list.",
   "Ask again after the next reorg.",
   "Two weeks. It is always two weeks.",
   "Reply hazy. Scope creep detected.",
-  "Very doubtful. Have you tried turning the deadline off and on again?",
   "Cannot predict now. The intern who knew is on vacation.",
   "Yes, definitely. Next year, definitely.",
   "Without a doubt: longer than you hope.",
   "Better not tell you now. You'd only worry.",
-  "My sources say: add a month for surprises.",
   'Outlook good, if nobody asks for "just one more thing".',
   "Signs point to: the day after the deadline.",
   "The first 90% is quick. The other 90% is not.",
-  "Ask again when the budget recovers.",
 ];
 
 // Shown in place of the model's non-answer, so blocked attempts don't all look the same.
@@ -32,7 +28,6 @@ export const HAZY = [
   "Concentrate, and ask again with an actual project.",
   "The spirits see no project in there. Try again.",
   "Cannot predict now. The ball needs a project, not a riddle.",
-  "Outlook murky. What are you making?",
 ];
 
 export const TIRED = "The spirits are tired. Try again tomorrow.";
