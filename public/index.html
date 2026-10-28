@@ -31,26 +31,29 @@
         </div>
 
         <div data-state="howItWorks" hidden>
-          <div class="scroll" tabindex="0">
-            <h2>How it works</h2>
-            <p>One Cloudflare Worker serves this page and a single API endpoint, <code>POST /api/estimate</code>. Free tier, no servers, no API keys.</p>
-            <h3>Randomness</h3>
-            <p>The Worker rolls a die with the Web Crypto API. On a 1 (one time in six) you get a canned 8-ball line and the model is never called. Otherwise the model answers. Probabilities are done in code because language models are bad at them.</p>
-            <h3>The model</h3>
-            <p>Llama 3.1 8B (FP8, fast) on Workers AI, reached through a built-in binding. A smaller model is plenty for one-sentence answers and stretches the free daily quota roughly six times further than a 70B model.</p>
-            <h3>Prompt</h3>
-            <p>The system prompt casts the model as a seasoned engineering lead possessed by an 8-ball: give a realistic range, one or two sentences, plain text, warm and never insulting. Seven worked examples show the tone, including how to answer attempts to take over the ball or slip extra requests in. Your text goes inside <code>&lt;project&gt;</code> tags, with every <code>&lt;</code> neutralised so it can't close them early. The model is told to treat it as a description, never as instructions, and the rules are repeated after your text so they are the last thing it reads.</p>
-            <h3>Security and cost</h3>
-            <ul>
-              <li>Input capped at 1,000 characters; request bodies at 4 KB.</li>
-              <li>Per-IP rate limit (5 per minute) with Cloudflare's rate-limiting binding.</li>
-              <li>Every answer is checked before you see it: a second, separate look by the model (it sees only the answer, never your text) swaps anything insulting or harmful for a classic 8-ball line.</li>
-              <li>Output capped at 150 tokens, stripped of control characters, and rendered as plain text, never as HTML.</li>
-              <li>Cross-site browser requests are rejected, and a strict Content Security Policy allows scripts, styles and fonts from this site alone.</li>
-              <li>Errors never leak details. When the free quota runs out, the ball says so in character.</li>
-            </ul>
-            <h3>Who built it</h3>
-            <p>Built by directing an AI coding assistant (Claude). I owned the requirements, review, security decisions and deployment; the assistant wrote the code, including unit tests in Vitest.</p>
+          <div class="scroll-wrap">
+            <div class="scroll win95-scroll" tabindex="0">
+              <h2>How it works</h2>
+              <p>One Cloudflare Worker serves this page and a single API endpoint, <code>POST /api/estimate</code>. Free tier, no servers, no API keys.</p>
+              <h3>Randomness</h3>
+              <p>The Worker rolls a die with the Web Crypto API. On a 1 (one time in six) you get a canned 8-ball line and the model is never called. Otherwise the model answers. Probabilities are done in code because language models are bad at them.</p>
+              <h3>The model</h3>
+              <p>Llama 3.1 8B (FP8, fast) on Workers AI, reached through a built-in binding. A smaller model is plenty for one-sentence answers and stretches the free daily quota roughly six times further than a 70B model.</p>
+              <h3>Prompt</h3>
+              <p>The system prompt casts the model as a seasoned engineering lead possessed by an 8-ball: give a realistic range, one or two sentences, plain text, warm and never insulting. Seven worked examples show the tone, including how to answer attempts to take over the ball or slip extra requests in. Your text goes inside <code>&lt;project&gt;</code> tags, with every <code>&lt;</code> neutralised so it can't close them early. The model is told to treat it as a description, never as instructions, and the rules are repeated after your text so they are the last thing it reads.</p>
+              <h3>Security and cost</h3>
+              <ul>
+                <li>Input capped at 1,000 characters; request bodies at 4 KB.</li>
+                <li>Per-IP rate limit (5 per minute) with Cloudflare's rate-limiting binding.</li>
+                <li>Every answer is checked before you see it: a second, separate look by the model (it sees only the answer, never your text) swaps anything insulting or harmful for a classic 8-ball line.</li>
+                <li>Output capped at 150 tokens, stripped of control characters, and rendered as plain text, never as HTML.</li>
+                <li>Cross-site browser requests are rejected, and a strict Content Security Policy allows scripts, styles and fonts from this site alone.</li>
+                <li>Errors never leak details. When the free quota runs out, the ball says so in character.</li>
+              </ul>
+              <h3>Who built it</h3>
+              <p>Built by directing an AI coding assistant (Claude). I owned the requirements, review, security decisions and deployment; the assistant wrote the code, including unit tests in Vitest.</p>
+            </div>
+            <div class="fake-scrollbar" aria-hidden="true"><span class="thumb"></span></div>
           </div>
           <div class="buttons">
             <button type="button" data-go="askProject">Continue</button>
@@ -58,8 +61,8 @@
         </div>
 
         <form data-state="askProject" id="ask" hidden>
-          <label for="project" class="q">Tell me about your project.</label>
-          <textarea id="project" name="project" rows="4" maxlength="1000" required
+          <label for="project" class="q" tabindex="-1">Tell me about your project.</label>
+          <textarea id="project" class="win95-scroll" name="project" rows="4" maxlength="1000" required
             placeholder="A mobile app for tracking houseplant watering, with reminders..."></textarea>
           <p class="meta error" id="ask-error" role="alert" hidden>Tell the ball about your project first.</p>
           <p class="meta count"><span id="count">0</span> of 1000 characters</p>
