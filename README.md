@@ -1,12 +1,12 @@
-# GUESSTIMATOR
-
-<img src="docs/8-ball.png" alt="A pixel-art 8-ball" width="200">
-
-**Try it: https://guesstimator.kateolenya.workers.dev**
+<h1><img src="docs/title.png" alt="GUESSTIMATOR" width="588"></h1>
 
 An 8-ball that tells you how long your project will take. One time in six it gives a classic 8-ball non-answer; otherwise an LLM gives a realistic estimate in a mystical tone.
 
 Built by directing an AI coding assistant (Claude). I owned requirements, review, security decisions and deployment.
+
+**Try it: https://guesstimator.kateolenya.workers.dev**
+
+<p align="center"><img src="docs/8-ball.png" alt="A pixel-art 8-ball" width="200"></p>
 
 ## Stack
 
@@ -75,4 +75,8 @@ Background and 8-ball: my own pixel art.
 
 ## License
 
-Code: MIT, see [LICENSE](LICENSE). My artwork (the background and the 8-ball) is not covered: all rights reserved. Fonts: SIL Open Font License 1.1.
+Code: MIT, see [LICENSE](LICENSE).
+
+My artwork is not covered by the MIT License: © 2026 Kateryna Kaidenko, all rights reserved. That is `public/images/starfield.png` (background), `public/images/ball.png` (8-ball) and `docs/8-ball.png` (8-ball, enlarged).
+
+Fonts: SIL Open Font License 1.1, license texts in `public/fonts/`.
