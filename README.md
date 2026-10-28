@@ -1,4 +1,4 @@
-<h1><img src="docs/title.png" alt="GUESSTIMATOR" width="588"></h1>
+<h1 align="center"><img src="docs/title.png" alt="GUESSTIMATOR" width="594"></h1>
 
 An 8-ball that tells you how long your project will take. One time in six it gives a classic 8-ball non-answer; otherwise an LLM gives a realistic estimate in a mystical tone.
 
