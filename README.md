@@ -1,4 +1,4 @@
-# guesstimator
+# GUESSTIMATOR
 
 A Magic 8-Ball that tells you how long your project will take. One time in six it gives a classic 8-ball non-answer; otherwise an LLM gives a realistic estimate in a mystical tone.
 
