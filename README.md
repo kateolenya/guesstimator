@@ -1,6 +1,6 @@
 # GUESSTIMATOR
 
-A Magic 8-Ball that tells you how long your project will take. One time in six it gives a classic 8-ball non-answer; otherwise an LLM gives a realistic estimate in a mystical tone.
+An 8-ball that tells you how long your project will take. One time in six it gives a classic 8-ball non-answer; otherwise an LLM gives a realistic estimate in a mystical tone.
 
 Built by directing an AI coding assistant (Claude). I owned requirements, review, security decisions and deployment.
 
@@ -56,6 +56,8 @@ Logs: Cloudflare dashboard → Workers & Pages → guesstimator → Logs.
 
 ## Credits
 
-Fonts: Press Start 2P and VT323, both under the SIL Open Font License 1.1.
+Fonts: Press Start 2P by CodeMan38 and VT323 by Peter Hull, both under the SIL Open Font License 1.1 (license texts in `public/fonts/`).
+
+Answers: Built with Llama (Meta Llama 3.1, via Cloudflare Workers AI).
 
 Background and 8-ball: my own pixel art.
