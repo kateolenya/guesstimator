@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { handleEstimate, type Env } from "../src/index";
 import {
   CLOUDY, HAZY, JOKES, JUDGE_MODEL, JUDGE_PROMPT, MAX_ANSWER_CHARS, MODEL, MAX_INPUT_CHARS, SLOW_DOWN, TIRED,
-  EXAMPLES, REMINDER, buildJudgeMessages, buildMessages, cleanAnswer, isHazy, judgeApproves,
+  EXAMPLES, REMINDER, STYLES, buildJudgeMessages, buildMessages, cleanAnswer, isHazy, judgeApproves,
   looksLikeEstimate, pick, validateProject,
 } from "../src/oracle";
 
@@ -67,6 +67,10 @@ describe("prompt and output hardening", () => {
       "user",
     ]);
     expect(messages.at(-1)!.content).toBe(`<project>a todo app</project>\n${REMINDER}`);
+  });
+  it("puts the rolled style hint between the user's text and the reminder", () => {
+    const last = buildMessages("a todo app", STYLES[0]).at(-1)!;
+    expect(last.content).toBe(`<project>a todo app</project>\nStyle for this answer: ${STYLES[0]}\n${REMINDER}`);
   });
   it("cleans control chars, collapses whitespace", () => {
     expect(cleanAnswer({ response: "a\u0000\n\n b" })).toBe("a b");
@@ -139,6 +143,12 @@ describe("handleEstimate", () => {
     expect(run.mock.calls[0][1]).toMatchObject({ max_tokens: 150, chat_template_kwargs: { enable_thinking: false } });
     expect(run.mock.calls[1][0]).toBe(JUDGE_MODEL);
     expect(run.mock.calls[1][1]).toMatchObject({ max_tokens: 2, temperature: 0 });
+  });
+  it("rolls a style hint for the answer in code", async () => {
+    const { env, run } = makeEnv();
+    const rolls = [0.99, 0]; // not a joke, then the first style
+    await handleEstimate(post({ project: "a todo app" }), env, () => rolls.shift() ?? 0.99);
+    expect(JSON.stringify(run.mock.calls[0][1])).toContain(`Style for this answer: ${STYLES[0]}`);
   });
 
   it("swaps the model's non-answer for a hazy line, skipping the judge", async () => {

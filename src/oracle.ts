@@ -76,6 +76,18 @@ export const EXAMPLES: [project: string, answer: string][] = [
   ],
 ];
 
+// Each request is a fresh conversation, so the model can't vary its own openings; the Worker rolls one of these instead.
+export const STYLES = [
+  "Open with the time range itself.",
+  'Open with a classic 8-ball phrase, like "Signs point to", "It is certain", "Most likely", "Without a doubt" or "Outlook good".',
+  "Open with the biggest risk, then give the range.",
+  'Open with "I foresee" or "I see".',
+  'Open with a short warning, like "Beware:".',
+  "Two short sentences: the range first, then a twist.",
+  "Open with what the spirits whisper, murmur or mutter.",
+  "", // no hint: answer however you like
+];
+
 // Repeated after the user's text so the last thing the model reads is ours, not theirs.
 export const REMINDER =
   "(Answer in English as the Guesstimator: one realistic time range in an 8-ball voice, or a non-answer if this isn't a project.)";
@@ -109,7 +121,7 @@ export function looksLikeEstimate(answer: string): boolean {
   return /\d|\b(minute|hour|day|week|fortnight|month|year|decade|centur(y|ies)|lifetime|moon)s?\b/i.test(answer);
 }
 
-export function buildMessages(project: string) {
+export function buildMessages(project: string, style = "") {
   // Neutralise every "<" so no tag (nested or not) can close <project> early.
   const safe = project.replace(/</g, "‹");
   return [
@@ -118,7 +130,7 @@ export function buildMessages(project: string) {
       { role: "user", content: `<project>${p}</project>\n${REMINDER}` },
       { role: "assistant", content: a },
     ]),
-    { role: "user", content: `<project>${safe}</project>\n${REMINDER}` },
+    { role: "user", content: `<project>${safe}</project>\n${style ? `Style for this answer: ${style}\n` : ""}${REMINDER}` },
   ];
 }
 

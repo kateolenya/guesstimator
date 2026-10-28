@@ -1,5 +1,5 @@
 import {
-  CLOUDY, HAZY, JOKES, JOKE_CHANCE, JUDGE_MODEL, MAX_OUTPUT_TOKENS, MODEL, SLOW_DOWN, TIRED,
+  CLOUDY, HAZY, JOKES, JOKE_CHANCE, STYLES, JUDGE_MODEL, MAX_OUTPUT_TOKENS, MODEL, SLOW_DOWN, TIRED,
   buildJudgeMessages, buildMessages, cleanAnswer, cryptoRandom, isHazy, isQuotaError, judgeApproves,
   looksLikeEstimate, pick, validateProject,
 } from "./oracle";
@@ -101,7 +101,7 @@ async function estimate(request: Request, env: Env, random: () => number): Promi
   let answer: string;
   try {
     const output = await env.AI.run(MODEL, {
-      messages: buildMessages(checked.project),
+      messages: buildMessages(checked.project, pick(STYLES, random())),
       max_tokens: MAX_OUTPUT_TOKENS,
       temperature: 0.8,
       // Gemma thinks before answering by default and would spend the whole token budget on it.
