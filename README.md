@@ -1,5 +1,9 @@
 # GUESSTIMATOR
 
+<img src="docs/8-ball.png" alt="A pixel-art 8-ball" width="200">
+
+**Try it: https://guesstimator.kateolenya.workers.dev**
+
 An 8-ball that tells you how long your project will take. One time in six it gives a classic 8-ball non-answer; otherwise an LLM gives a realistic estimate in a mystical tone.
 
 Built by directing an AI coding assistant (Claude). I owned requirements, review, security decisions and deployment.
@@ -61,3 +65,14 @@ Fonts: Press Start 2P by CodeMan38 and VT323 by Peter Hull, both under the SIL O
 Answers: Gemma 4 by Google (Apache 2.0). Answer checker: Built with Llama (Meta Llama 3.1 8B). Both via Cloudflare Workers AI.
 
 Background and 8-ball: my own pixel art.
+
+## Privacy
+
+- What you type is sent to Cloudflare Workers AI to get an answer. Don't enter anything confidential.
+- Your IP address is used for the rate limit.
+- No cookies, no analytics, no tracking.
+- The site logs errors and answers the checker blocks, for debugging. Cloudflare, which hosts the site, also keeps short-lived request logs under its own privacy policy.
+
+## License
+
+Code: MIT, see [LICENSE](LICENSE). My artwork (the background and the 8-ball) is not covered: all rights reserved. Fonts: SIL Open Font License 1.1.
