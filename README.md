@@ -58,4 +58,4 @@ Logs: Cloudflare dashboard → Workers & Pages → guesstimator → Logs.
 
 Fonts: Press Start 2P and VT323, both under the SIL Open Font License 1.1.
 
-Background: my own pixel art.
+Background and 8-ball: my own pixel art.
