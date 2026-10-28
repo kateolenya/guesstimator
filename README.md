@@ -77,6 +77,6 @@ Background and 8-ball: my own pixel art.
 
 Code: MIT, see [LICENSE](LICENSE).
 
-My artwork is not covered by the MIT License: © 2026 Kateryna Kaidenko, all rights reserved. That is `public/images/starfield.png` (background), `public/images/ball.png` (8-ball) and `docs/8-ball.png` (8-ball, enlarged).
+My artwork is not covered by the MIT License: © 2026 Kateryna Kaidenko, all rights reserved. That is `public/images/starfield.png` (background), `public/images/ball.png` (8-ball), `docs/8-ball.png` (8-ball, enlarged) and `public/images/og.png` (link preview image).
 
 Fonts: SIL Open Font License 1.1, license texts in `public/fonts/`.
