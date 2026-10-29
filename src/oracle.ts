@@ -87,10 +87,15 @@ export const STYLES = [
 export const REMINDER =
   "(Answer in English as the Guesstimator: one realistic time range in an 8-ball voice, or a non-answer if this isn't a project.)";
 
-/** Returns the trimmed project text, or an error message for the user. */
+// Don't show on screen, but a model still reads them: zero-width chars, soft hyphens, word joiners, bidi overrides,
+// Unicode tag chars (they mirror ASCII, so whole instructions can hide in them) and the variation selectors that
+// hide bytes in emoji.
+export const INVISIBLE = /[\u00AD\u034F\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u2069\uFEFF\u{E0000}-\u{E007F}\u{E0100}-\u{E01EF}]/gu;
+
+/** Returns the trimmed project text without invisible chars, or an error message for the user. */
 export function validateProject(body: unknown): { project: string } | { error: string } {
   const raw = (body as { project?: unknown } | null)?.project;
-  const project = typeof raw === "string" ? raw.trim() : "";
+  const project = typeof raw === "string" ? raw.replace(INVISIBLE, "").trim() : "";
   if (!project) return { error: "Tell the ball about your project first." };
   if (project.length > MAX_INPUT_CHARS)
     return { error: `Keep it under ${MAX_INPUT_CHARS} characters. The ball has a short attention span.` };
@@ -178,8 +183,8 @@ export function cleanAnswer(output: unknown): string {
   const text = outputText(output);
   if (typeof text !== "string") return CLOUDY;
   const cleaned = text
-    // control chars, zero-width chars and bidi overrides
-    .replace(/[\u0000-\u0008\u000B-\u001F\u007F\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "")
+    .replace(/[\u0000-\u0008\u000B-\u001F\u007F]/g, "") // control chars
+    .replace(INVISIBLE, "")
     .replace(/\s+/g, " ")
     .trim();
   if (!cleaned) return CLOUDY;
